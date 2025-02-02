@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Persistence.Repositories.Interfaces;
 using Persistence.Repositories.Implementations;
 using AutoMapper;
+using Persistence.DbInitializer;
 
 namespace Persistence;
 
@@ -25,7 +26,7 @@ public static class PersistenceModule
             options.EnableDetailedErrors();
             options.EnableSensitiveDataLogging();
             options.UseLazyLoadingProxies();
-            options.UseSqlServer(connectionString, x =>
+            options.UseNpgsql(connectionString, x =>
             {
                 x.EnableRetryOnFailure(2);
                 x.CommandTimeout(5);
@@ -33,8 +34,10 @@ public static class PersistenceModule
             options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.BoolWithDefaultWarning));
         });
 
+
         services.AddTransient<INameRepository, NameRepository>();
         services.AddTransient<IPatientRepository, PatientRepository>();
+        services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
 
 
         AddAutomapper(services);
