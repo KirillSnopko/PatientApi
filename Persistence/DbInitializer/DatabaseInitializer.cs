@@ -1,4 +1,7 @@
-﻿using Persistence.Repositories.Interfaces;
+﻿using Domain.DbEntities;
+using Newtonsoft.Json;
+using Persistence.Repositories.Interfaces;
+using System.Reflection;
 
 namespace Persistence.DbInitializer;
 
@@ -21,9 +24,21 @@ public sealed class DatabaseInitializer : IDatabaseInitializer
     {
         if (!_patientRepository.Queryable().Any())
         {
-            var data = new[] { 554, 265, 354, 469 };
-            var sectors = data.Select(x => new Sector { Number = x }).ToList();
-            await _sectorRepository.CreateAsync(sectors);
+            var fileName = "users.json";
+            var assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            var fileLocation = Path.Combine(assemblyLocation!, fileName);
+
+            if (!File.Exists(fileLocation))
+            {
+                throw new FileNotFoundException($"File ({fileName}) not found");
+            }
+
+            var json = await File.ReadAllTextAsync(fileLocation);
+
+            var jsonLanguages = JsonConvert.DeserializeObject<List<Patient>>(json);
+
+            await _patientRepository.CreateAsync(jsonLanguages);
         }
     }
 }

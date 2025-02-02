@@ -61,8 +61,4 @@ public class PatientController : Controller
     [HttpGet("search/by-date", Name = "Search by date")]
     [ProducesResponseType(typeof(List<PatientDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult> GetByDateRange(DateTime? start, DateTime? end) => Ok(await _mediator.Send(new GetByDateQuery { DateStart = start, DateEnd = end }));
-
-
-
-
 }

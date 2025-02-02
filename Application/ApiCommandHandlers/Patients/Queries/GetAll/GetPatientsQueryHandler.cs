@@ -26,11 +26,11 @@ public sealed class GetPatientsQueryHandler : IRequestHandler<GetPatientsQuery, 
 
         if (request.SortByFamilyNameAsc)
         {
-            queryable = queryable.OrderBy(x => x.FIO);
+            queryable = queryable.OrderBy(x => x.Name.Family);
         }
         else
         {
-            queryable = queryable.OrderByDescending(x => x.FIO);
+            queryable = queryable.OrderByDescending(x => x.Name.Family);
         }
 
         return queryable.Skip(request.PaginationParams.Offset)

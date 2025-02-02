@@ -33,11 +33,9 @@ public static class PersistenceModule
             options.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.BoolWithDefaultWarning));
         });
 
-        services.AddTransient<ICabinetRepository, CabinetRepository>();
-        services.AddTransient<IPatientRepository, NameRepository>();
+        services.AddTransient<INameRepository, NameRepository>();
         services.AddTransient<IPatientRepository, PatientRepository>();
-        services.AddTransient<ISectorRepository, SectorRepository>();
-        services.AddTransient<ISpecializationRepository, SpecializationRepository>();
+
 
         AddAutomapper(services);
     }
