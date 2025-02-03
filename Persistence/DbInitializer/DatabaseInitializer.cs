@@ -36,9 +36,14 @@ public sealed class DatabaseInitializer : IDatabaseInitializer
 
             var json = await File.ReadAllTextAsync(fileLocation);
 
-            var jsonLanguages = JsonConvert.DeserializeObject<List<Patient>>(json);
+            var users = JsonConvert.DeserializeObject<List<Patient>>(json);
 
-            await _patientRepository.CreateAsync(jsonLanguages);
+            foreach (var item in users)
+            {
+                item.DateOfBirth = DateTime.SpecifyKind(item.DateOfBirth, DateTimeKind.Utc);
+            }
+
+            await _patientRepository.CreateAsync(users);
         }
     }
 }

@@ -1,14 +1,14 @@
 version: '3.8'
 
 services:
-  postgres:
-    container_name: postgres
+  postgres-db:
+    container_name: postgres-db
     image: postgres
     restart: always
     ports:
       - 5432:5432
     networks:
-      - lingopractices
+      - hospital
     volumes:
       - ./volumes/postgres:/var/lib/postgresql
     environment:
@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on: 
-      - postgres
+      - postgres-db
     #Map port 8888 in the docker container to port 80 in the Api
     ports:
       - "5000:80"
